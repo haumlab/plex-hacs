@@ -26,9 +26,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Fetch data from Plex API."""
         try:
             def fetch_plex_data():
+                # Get active sessions
+                sessions = plex_server.sessions()
+                # Get currently reachable clients
+                clients = plex_server.clients()
+                # Get all devices linked to the account (for persistence)
+                devices = plex_server.myPlexAccount().devices() if plex_server._baseurl == "https://plex.tv" else []
+                
                 return {
-                    "sessions": plex_server.sessions(),
-                    "clients": plex_server.clients()
+                    "sessions": sessions,
+                    "clients": clients,
+                    "devices": devices
                 }
             return await hass.async_add_executor_job(fetch_plex_data)
         except Exception as err:
@@ -51,13 +59,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "entities": set()
     }
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["media_player"])
+    await hass.config_entries.async_forward_entry_setups(entry, ["media_player", "sensor"])
 
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, ["media_player"])
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, ["media_player", "sensor"])
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 

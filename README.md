@@ -4,10 +4,12 @@ A HACS custom integration for Home Assistant that allows you to control Plex dev
 For more information, visit [https://github.com/haumlab/plex-hacs](https://github.com/haumlab/plex-hacs).
 
 ## Features
-- Export Plex clients as Media Player entities.
-- Play, Pause, Stop, Next, Previous.
-- Volume control.
-- Use in Home Assistant automations.
+- **Persistent Media Players**: Export Plex clients as Media Player entities with detailed metadata.
+- **Now Playing Info**: See title, artist, album, season/episode, and progress.
+- **Session Tracking**: A sensor that shows how many people are watching and what they are watching.
+- **User Attribution**: See which Plex user is watching on which device.
+- **Full Control**: Play, Pause, Stop, Next, Previous, Seek, and Volume control.
+- **Automation Ready**: Use playback states and session counts in your Home Assistant automations.
 
 ## Installation
 1. Open **HACS** in your Home Assistant.
