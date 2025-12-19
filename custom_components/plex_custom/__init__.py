@@ -26,18 +26,35 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Fetch data from Plex API."""
         try:
             def fetch_plex_data():
-                # Get active sessions
-                sessions = plex_server.sessions()
-                # Get currently reachable clients
-                clients = plex_server.clients()
-                # Get all devices linked to the account (for persistence)
-                devices = plex_server.myPlexAccount().devices() if plex_server._baseurl == "https://plex.tv" else []
-                
-                return {
-                    "sessions": sessions,
-                    "clients": clients,
-                    "devices": devices
+                data = {
+                    "sessions": [],
+                    "clients": [],
+                    "devices": []
                 }
+                
+                # 1. Get active sessions (most reliable for "Now Playing")
+                try:
+                    data["sessions"] = plex_server.sessions()
+                except Exception as e:
+                    _LOGGER.error("Error fetching Plex sessions: %s", e)
+
+                # 2. Get currently reachable clients
+                try:
+                    data["clients"] = plex_server.clients()
+                except Exception as e:
+                    _LOGGER.error("Error fetching Plex clients: %s", e)
+
+                # 3. Get all devices linked to the account
+                try:
+                    # Try to get account-level devices if possible
+                    account = plex_server.myPlexAccount()
+                    if account:
+                        data["devices"] = [d for d in account.devices() if "client" in d.provides]
+                except Exception as e:
+                    _LOGGER.debug("Could not fetch account devices (normal if not signed in to MyPlex): %s", e)
+                
+                return data
+
             return await hass.async_add_executor_job(fetch_plex_data)
         except Exception as err:
             raise UpdateFailed(f"Error communicating with Plex API: {err}")
