@@ -1,7 +1,7 @@
 {
   "domain": "plex_custom",
   "name": "Plex Custom Control",
-  "documentation": "https://github.com/macbookm/plex_custom",
+  "documentation": "https://github.com/haumlab/plex-hacs",
   "requirements": ["plexapi==4.15.15"],
   "dependencies": [],
   "codeowners": ["@macbookm"],

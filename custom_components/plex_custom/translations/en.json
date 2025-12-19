@@ -1,16 +1,33 @@
 {
   "config": {
     "step": {
-      "user": {
-        "title": "Plex Custom Control Setup",
+      "auth_type": {
+        "title": "Authentication Method",
+        "description": "Choose how you want to authenticate with Plex.",
         "data": {
-          "server_url": "Plex Server URL (e.g. http://192.168.1.100:32400)",
+          "type": "Method"
+        }
+      },
+      "manual": {
+        "title": "Manual Token",
+        "data": {
           "token": "Plex Token"
+        }
+      },
+      "pin": {
+        "title": "Plex.tv PIN",
+        "description": "Please visit [https://plex.tv/link](https://plex.tv/link) and enter the following code:\n\n### {code}\n\nClick Submit once you have linked your account."
+      },
+      "server": {
+        "title": "Plex Server",
+        "data": {
+          "server_url": "Plex Server URL (e.g. http://192.168.1.100:32400)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect to Plex server. Check URL and Token."
+      "cannot_connect": "Failed to connect to Plex server. Check URL and Token.",
+      "not_authenticated": "PIN not yet authenticated. Please link your account at plex.tv/link first."
     }
   }
 }
